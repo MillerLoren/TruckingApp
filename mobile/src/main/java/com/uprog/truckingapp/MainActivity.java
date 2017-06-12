@@ -14,7 +14,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     //Array of pages for table of contents.
-    static final String[] PAGES = new String[] { "About", "Profile", "Settings", "Feedback", "Maps" };
+    static final String[] PAGES = new String[] { "About", "Profile", "Settings", "Feedback", "Maps", "NavBar" };
 
 
     @Override
@@ -36,28 +36,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //What to do when list item is clicked.
         TextView textView = (TextView)view;
         switch(textView.getText().toString()){
-            case "Profile":
-                Intent profile = new Intent(this,ProfileActivity.class);
-                startActivity(profile);
-                break;
-            case "Settings":
-                Intent settings = new Intent(this,SettingsActivity.class);
-                startActivity(settings);
-                break;
-            case "Maps":
-                Intent maps = new Intent(this,MapsActivity.class);
-                startActivity(maps);
-                break;
-            case "About":
-                Intent about = new Intent(this,AboutActivity.class);
-                startActivity(about);
-                break;
-            case "Feedback":
-                Intent feedback = new Intent(this,FeedbackActivity.class);
-                startActivity(feedback);
+            case "NavBar":
+                Intent nav = new Intent(this, NavDrawerActivity.class);
+                startActivity(nav);
                 break;
         }
-
 
         //Toast.makeText(MainActivity.this,"Go to " + textView.getText().toString() + " page.",Toast.LENGTH_LONG).show();
     }
