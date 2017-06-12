@@ -2,6 +2,7 @@ package com.uprog.truckingapp;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -73,6 +74,7 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
+
                 e.printStackTrace();
             }
 
@@ -131,6 +133,9 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
+                Toast toast = Toast.makeText(ctx, "There was an input error.", Toast.LENGTH_LONG);
+                toast.show();
+                ctx.startActivity(new Intent(ctx,NavDrawerActivity.class));
                 e.printStackTrace();
             }
 
