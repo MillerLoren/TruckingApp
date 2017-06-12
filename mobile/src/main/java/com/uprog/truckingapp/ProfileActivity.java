@@ -32,12 +32,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         if(view.getId()==R.id.button_register) {
             user_name = etUserName.getText().toString();
             user_pass = etUserPass.getText().toString();
+            method = "Register";
             BackgroundTask backgroundTask = new BackgroundTask(this);
             backgroundTask.execute(method, user_name, user_pass);
         }
         else if(view.getId()==R.id.button_login){
             user_name = etUserName.getText().toString();
             user_pass = etUserPass.getText().toString();
+            method = "Login";
             BackgroundTask backgroundTask = new BackgroundTask(this);
             backgroundTask.execute(method,user_name,user_pass);
         }
