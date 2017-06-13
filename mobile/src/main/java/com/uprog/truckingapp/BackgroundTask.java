@@ -60,21 +60,25 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
                 bufferedWriter.close();
                 os.close();
 
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"iso-8859-1"));
-                String response ="";
-                String line = "";
-                while ((line = bufferedReader.readLine()) != null){
-                    response+=line;
+                String response = "";
+                if(httpURLConnection.getResponseCode()==HttpURLConnection.HTTP_OK) {
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String line = "";
+                    while ((line = bufferedReader.readLine()) != null) {
+                        response += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
                 }
-                bufferedReader.close();
-                inputStream.close();
+                else{
+                    response = "Error connecting to server.";
+                }
                 httpURLConnection.disconnect();
                 return response;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
-
                 e.printStackTrace();
             }
 
@@ -97,15 +101,20 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
                 bufferedWriter.close();
                 outputStream.close();
 
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"iso-8859-1"));
-                String response ="";
-                String line = "";
-                while ((line = bufferedReader.readLine()) != null){
-                    response+=line;
+                String response = "";
+                if (httpURLConnection.getResponseCode()==HttpURLConnection.HTTP_OK) {
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String line = "";
+                    while ((line = bufferedReader.readLine()) != null) {
+                        response += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
                 }
-                bufferedReader.close();
-                inputStream.close();
+                else{
+                    response = "Error connecting to server.";
+                }
                 httpURLConnection.disconnect();
                 return response;
             } catch (MalformedURLException e) {
@@ -120,22 +129,24 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
             try {
                 URL url = new URL(json_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 StringBuilder stringBuilder = new StringBuilder();
-                while ((JSON_STRING = bufferedReader.readLine())!=null){
-                    stringBuilder.append(JSON_STRING+"\n");
+                if(httpURLConnection.getResponseCode()==HttpURLConnection.HTTP_OK) {
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                    while ((JSON_STRING = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(JSON_STRING + "\n");
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
                 }
-                bufferedReader.close();
-                inputStream.close();
+                else{
+                    stringBuilder.append("Error connecting to server.");
+                }
                 httpURLConnection.disconnect();
                 return stringBuilder.toString().trim();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
-                Toast toast = Toast.makeText(ctx, "There was an input error.", Toast.LENGTH_LONG);
-                toast.show();
-                ctx.startActivity(new Intent(ctx,NavDrawerActivity.class));
                 e.printStackTrace();
             }
 
