@@ -167,6 +167,10 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
             alertDialog.setTitle("Registration");
             alertDialog.setMessage("Please choose another username. "+user_name + " is already taken.");
         }
+        else if(result.contains("inserted")){
+            alertDialog.setTitle("Registration");
+            alertDialog.setMessage(result);
+        }
         else {
             alertDialog.setTitle("Login Information");
             alertDialog.setMessage(result);
