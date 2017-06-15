@@ -39,15 +39,13 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String reg_url = "http://uprog.gear.host/register.php"; //temporary development host
-        String ret_url = "http://uprog.gear.host/retrieve.php"; //temporary development host
-        String json_url = "http://uprog.gear.host/get_data.php"; //temporary development host
+
         String method = params[0];
         if(method.equals("Register")){
             user_name = params[1];
             user_pass = params[2];
             try {
-                URL url = new URL(reg_url);
+                URL url = new URL(ctx.getString(R.string.reg_url));
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoOutput(true);
@@ -87,7 +85,7 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
             String login_name = params[1];
             String login_pass = params[2];
             try {
-                URL url = new URL(ret_url);
+                URL url = new URL(ctx.getString(R.string.ret_url));
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoOutput(true);
@@ -127,7 +125,7 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
 
             String JSON_STRING;
             try {
-                URL url = new URL(json_url);
+                URL url = new URL(ctx.getString(R.string.json_url));
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 StringBuilder stringBuilder = new StringBuilder();
                 if(httpURLConnection.getResponseCode()==HttpURLConnection.HTTP_OK) {
