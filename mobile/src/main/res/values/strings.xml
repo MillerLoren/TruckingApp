@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">TruckingApp</string>
+
+    <!-- URLs to connect to database -->
+    <string name="reg_url">http://nobility.ml/trucking_app/register.php</string>
+    <string name="ret_url">http://nobility.ml/trucking_app/retrieve.php</string>
+    <string name="json_url">http://nobility.ml/trucking_app/get_data.php</string>
+
+
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->

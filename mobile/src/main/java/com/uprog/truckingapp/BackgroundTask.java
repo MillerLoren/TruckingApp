@@ -39,15 +39,13 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String reg_url = "http://uprog.gear.host/register.php"; //temporary development host
-        String ret_url = "http://uprog.gear.host/retrieve.php"; //temporary development host
-        String json_url = "http://uprog.gear.host/get_data.php"; //temporary development host
+
         String method = params[0];
         if(method.equals("Register")){
             user_name = params[1];
             user_pass = params[2];
             try {
-                URL url = new URL(reg_url);
+                URL url = new URL(ctx.getString(R.string.reg_url));
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoOutput(true);
@@ -60,21 +58,25 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
                 bufferedWriter.close();
                 os.close();
 
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"iso-8859-1"));
-                String response ="";
-                String line = "";
-                while ((line = bufferedReader.readLine()) != null){
-                    response+=line;
+                String response = "";
+                if(httpURLConnection.getResponseCode()==HttpURLConnection.HTTP_OK) {
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String line = "";
+                    while ((line = bufferedReader.readLine()) != null) {
+                        response += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
                 }
-                bufferedReader.close();
-                inputStream.close();
+                else{
+                    response = "Error connecting to server.";
+                }
                 httpURLConnection.disconnect();
                 return response;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
-
                 e.printStackTrace();
             }
 
@@ -83,7 +85,7 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
             String login_name = params[1];
             String login_pass = params[2];
             try {
-                URL url = new URL(ret_url);
+                URL url = new URL(ctx.getString(R.string.ret_url));
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoOutput(true);
@@ -97,15 +99,20 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
                 bufferedWriter.close();
                 outputStream.close();
 
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"iso-8859-1"));
-                String response ="";
-                String line = "";
-                while ((line = bufferedReader.readLine()) != null){
-                    response+=line;
+                String response = "";
+                if (httpURLConnection.getResponseCode()==HttpURLConnection.HTTP_OK) {
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                    String line = "";
+                    while ((line = bufferedReader.readLine()) != null) {
+                        response += line;
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
                 }
-                bufferedReader.close();
-                inputStream.close();
+                else{
+                    response = "Error connecting to server.";
+                }
                 httpURLConnection.disconnect();
                 return response;
             } catch (MalformedURLException e) {
@@ -118,24 +125,26 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
 
             String JSON_STRING;
             try {
-                URL url = new URL(json_url);
+                URL url = new URL(ctx.getString(R.string.json_url));
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 StringBuilder stringBuilder = new StringBuilder();
-                while ((JSON_STRING = bufferedReader.readLine())!=null){
-                    stringBuilder.append(JSON_STRING+"\n");
+                if(httpURLConnection.getResponseCode()==HttpURLConnection.HTTP_OK) {
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                    while ((JSON_STRING = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(JSON_STRING + "\n");
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
                 }
-                bufferedReader.close();
-                inputStream.close();
+                else{
+                    stringBuilder.append("Error connecting to server.");
+                }
                 httpURLConnection.disconnect();
                 return stringBuilder.toString().trim();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
-                Toast toast = Toast.makeText(ctx, "There was an input error.", Toast.LENGTH_LONG);
-                toast.show();
-                ctx.startActivity(new Intent(ctx,NavDrawerActivity.class));
                 e.printStackTrace();
             }
 
@@ -155,6 +164,10 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
         if(result.contains("Duplicate entry")) {
             alertDialog.setTitle("Registration");
             alertDialog.setMessage("Please choose another username. "+user_name + " is already taken.");
+        }
+        else if(result.contains("inserted")){
+            alertDialog.setTitle("Registration");
+            alertDialog.setMessage(result);
         }
         else {
             alertDialog.setTitle("Login Information");
