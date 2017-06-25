@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.widget.Toast;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -29,7 +27,7 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
     BackgroundTask(Context ctx){
         this.ctx = ctx;
     }
-    String user_name,user_pass;
+    String user_name,user_pass,truck_name;
 
     @Override
     protected void onPreExecute() {
@@ -44,6 +42,7 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
         if(method.equals("Register")){
             user_name = params[1];
             user_pass = params[2];
+            truck_name = params[3];
             try {
                 URL url = new URL(ctx.getString(R.string.reg_url));
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -52,7 +51,8 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
                 OutputStream os = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
                 String data = URLEncoder.encode("user_name","UTF-8") + "=" + URLEncoder.encode(user_name,"UTF-8") +"&"+
-                        URLEncoder.encode("user_pass","UTF-8") + "=" + URLEncoder.encode(user_pass,"UTF-8");
+                        URLEncoder.encode("user_pass","UTF-8") + "=" + URLEncoder.encode(user_pass,"UTF-8") +"&"+
+                        URLEncoder.encode("truck_name","UTF-8") + "=" + URLEncoder.encode(truck_name, "UTF-8");
                 bufferedWriter.write(data);
                 bufferedWriter.flush();
                 bufferedWriter.close();
@@ -165,13 +165,24 @@ public class BackgroundTask extends AsyncTask<String, Object, String> {
             alertDialog.setTitle("Registration");
             alertDialog.setMessage("Please choose another username. "+user_name + " is already taken.");
         }
-        else if(result.contains("inserted")){
+        else if(result.equals("User was registered")){
             alertDialog.setTitle("Registration");
             alertDialog.setMessage(result);
         }
-        else {
+        else if(result.equals("User was logged in")){
             alertDialog.setTitle("Login Information");
             alertDialog.setMessage(result);
+            ctx.startActivity(new Intent(ctx,NavDrawerActivity.class));
+            ProfileActivity.fa.finish();
+            NavDrawerActivity.isLoggedIn = true;
+        }
+        else if(result.equals("Unable to find specified information.")){
+            alertDialog.setTitle("Login Information");
+            alertDialog.setMessage(result);
+        }
+        else{
+            alertDialog.setTitle("Error");
+            alertDialog.setMessage("Something went wrong. Please try again.");
         }
 
         alertDialog.show();

@@ -6,6 +6,14 @@
     <string name="ret_url">http://nobility.ml/trucking_app/retrieve.php</string>
     <string name="json_url">http://nobility.ml/trucking_app/get_data.php</string>
 
+    <!-- Options for the Truck Spinner -->
+    <string-array name="truckOptions">
+        <item>Mack</item>
+        <item>Peterbuilt</item>
+        <item>Mercedes</item>
+        <item>Other</item>
+    </string-array>
+
 
     <string name="title_activity_settings">Settings</string>
 

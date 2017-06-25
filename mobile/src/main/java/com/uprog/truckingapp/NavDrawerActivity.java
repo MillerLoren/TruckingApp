@@ -13,9 +13,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 public class NavDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static Boolean isLoggedIn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +87,14 @@ public class NavDrawerActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-                Intent profile = new Intent(this,ProfileActivity.class);
+            if(isLoggedIn){
+                Toast toast = Toast.makeText(this,"Already logged in",Toast.LENGTH_LONG);
+                toast.show();
+            }
+            else {
+                Intent profile = new Intent(this, ProfileActivity.class);
                 startActivity(profile);
+            }
         } else if (id == R.id.nav_comments) {
                 Intent feedback = new Intent(this,FeedbackActivity.class);
                 startActivity(feedback);
